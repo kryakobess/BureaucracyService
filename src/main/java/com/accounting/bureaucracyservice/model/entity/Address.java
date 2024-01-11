@@ -1,15 +1,14 @@
 package com.accounting.bureaucracyservice.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
 public class Address {
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
+    @SequenceGenerator(allocationSize = 1, name = "address_seq", sequenceName = "address_seq")
     private Long id;
 
     @Column(name = "index")

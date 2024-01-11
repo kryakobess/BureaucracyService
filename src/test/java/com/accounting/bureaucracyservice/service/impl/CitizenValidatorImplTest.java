@@ -1,5 +1,6 @@
 package com.accounting.bureaucracyservice.service.impl;
 
+import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
@@ -28,12 +29,12 @@ class CitizenValidatorImplTest {
     @Test
     public void validateSuccessfully() {
         CitizenCreateDto dto = CitizenCreateDto.builder()
-                .dateOfBirth(Date.valueOf(LocalDate.now()))
+                .dateOfBirth(LocalDate.now())
                 .firstName("First")
                 .secondName("Second")
                 .passportSeries(1234)
                 .passportNumber(567890)
-                .registrationAddress(AddressDto.builder().build())
+                .registrationAddress(AddressCreateDto.builder().build())
                 .build();
 
         assertDoesNotThrow(() -> validator.validate(dto));
@@ -48,12 +49,12 @@ class CitizenValidatorImplTest {
     @Test
     public void invalidPassportSeries() {
         CitizenCreateDto dto = CitizenCreateDto.builder()
-                .dateOfBirth(Date.valueOf(LocalDate.now()))
+                .dateOfBirth(LocalDate.now())
                 .firstName("First")
                 .secondName("Second")
                 .passportSeries(12345)
                 .passportNumber(567890)
-                .registrationAddress(AddressDto.builder().build())
+                .registrationAddress(AddressCreateDto.builder().build())
                 .build();
 
         assertThrows(BadRequestException.class,
@@ -63,12 +64,12 @@ class CitizenValidatorImplTest {
     @Test
     public void invalidPassportNumber() {
         CitizenCreateDto dto = CitizenCreateDto.builder()
-                .dateOfBirth(Date.valueOf(LocalDate.now()))
+                .dateOfBirth(LocalDate.now())
                 .firstName("First")
                 .secondName("Second")
                 .passportSeries(1234)
                 .passportNumber(5678490)
-                .registrationAddress(AddressDto.builder().build())
+                .registrationAddress(AddressCreateDto.builder().build())
                 .build();
 
         assertThrows(BadRequestException.class,

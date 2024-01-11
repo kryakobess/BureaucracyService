@@ -1,20 +1,16 @@
 package com.accounting.bureaucracyservice.service.mapper;
 
-import com.accounting.bureaucracyservice.model.dto.AddressDto;
+import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenDto;
-import com.accounting.bureaucracyservice.model.dto.DocumentDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
-import com.accounting.bureaucracyservice.model.entity.Document;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,8 +60,8 @@ class CitizenMapperTest {
         // Arrange
         when(citizenCreateDto.firstName()).thenReturn("First");
         when(citizenCreateDto.secondName()).thenReturn("Second");
-        when(citizenCreateDto.dateOfBirth()).thenReturn(Date.valueOf(LocalDate.now()));
-        when(citizenCreateDto.registrationAddress()).thenReturn(AddressDto.builder().build());
+        when(citizenCreateDto.dateOfBirth()).thenReturn(LocalDate.now());
+        when(citizenCreateDto.registrationAddress()).thenReturn(AddressCreateDto.builder().build());
         when(addressMapper.toModel(any())).thenReturn(new Address());
 
         // Act

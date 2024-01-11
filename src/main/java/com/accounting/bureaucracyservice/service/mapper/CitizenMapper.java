@@ -21,6 +21,7 @@ public abstract class CitizenMapper {
     public abstract CitizenDto toDto(Citizen entity);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "approvedAccount", ignore = true)
     @Mapping(target = "documents", expression = "java(getIdentityDocuments(citizenCreateDto))")
     @Mapping(target = "addresses", expression = "java(java.util.List.of(addressMapper.toModel(citizenCreateDto.registrationAddress())))")
     public abstract Citizen toModel(CitizenCreateDto citizenCreateDto);

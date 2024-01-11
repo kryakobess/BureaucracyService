@@ -1,5 +1,6 @@
 package com.accounting.bureaucracyservice.service.impl;
 
+import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.service.validator.AddressValidator;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class AddressValidatorImpl implements AddressValidator {
 
     @Override
-    public void validate(AddressDto dto) {
+    public void validate(AddressCreateDto dto) {
         checkNotNull(dto.city(), "city");
         checkNotNull(dto.houseNumber(), "houseNumber");
         checkNotNull(dto.region(), "region");

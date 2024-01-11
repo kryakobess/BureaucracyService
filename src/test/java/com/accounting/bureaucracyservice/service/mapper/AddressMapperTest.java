@@ -1,5 +1,6 @@
 package com.accounting.bureaucracyservice.service.mapper;
 
+import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import org.junit.jupiter.api.Assertions;
@@ -21,8 +22,7 @@ class AddressMapperTest {
 
     @Test
     public void dtoToEntity() {
-        var dto = AddressDto.builder()
-                .id(1L)
+        var dto = AddressCreateDto.builder()
                 .region("Нижегородский")
                 .city("Нижний Новгород")
                 .street("Родионова")
@@ -55,7 +55,7 @@ class AddressMapperTest {
         AddressDto dto = addressMapper.toDto(address);
 
         assertNotNull(dto);
-        assertEquals(1, dto.id());
+        assertEquals(1L, dto.id());
         assertEquals(123456, dto.index());
         assertEquals("Регион", dto.region());
         assertEquals("Город", dto.city());

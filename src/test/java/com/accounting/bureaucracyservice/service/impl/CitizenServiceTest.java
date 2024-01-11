@@ -2,10 +2,12 @@ package com.accounting.bureaucracyservice.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenDto;
+import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.entity.Document;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
+import com.accounting.bureaucracyservice.service.AddressService;
 import com.accounting.bureaucracyservice.service.impl.CitizenServiceImpl;
 import com.accounting.bureaucracyservice.service.mapper.CitizenMapper;
 import com.accounting.bureaucracyservice.service.repository.CitizenRepository;
@@ -29,6 +31,8 @@ class CitizenServiceTest {
     @Mock
     private CitizenValidator validator;
     @Mock
+    private AddressService addressService;
+    @Mock
     private CitizenMapper mapper;
     @Mock
     private CitizenRepository repository;
@@ -49,6 +53,7 @@ class CitizenServiceTest {
                 .thenReturn(false);
         when(repository.save(any())).thenReturn(citizen);
         when(mapper.toDto(any())).thenReturn(CitizenDto.builder().build());
+        when(addressService.getOrSave(any())).thenReturn(new Address());
 
         citizenService.createCitizen(createDto);
 
@@ -59,6 +64,7 @@ class CitizenServiceTest {
                 citizen.getSecondName(),
                 DocumentType.IDENTITY_PASSPORT
         );
+        verify(addressService).getOrSave(createDto.registrationAddress());
         verify(repository).save(citizen);
     }
 

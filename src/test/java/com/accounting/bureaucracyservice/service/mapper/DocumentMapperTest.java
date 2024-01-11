@@ -26,7 +26,6 @@ class DocumentMapperTest {
     @Test
     public void shouldMapDocumentDtoToModelCorrectly() {
         // Arrange
-        when(documentDto.id()).thenReturn(1L);
         when(documentDto.documentType()).thenReturn(DocumentType.DRIVER_LICENCE);
         when(documentDto.number()).thenReturn("1234567890");
 
@@ -35,7 +34,6 @@ class DocumentMapperTest {
 
         // Assert
         assertNotNull(model);
-        assertEquals(1, model.getId());
         assertEquals(DocumentType.DRIVER_LICENCE, model.getDocumentType());
         assertEquals("1234567890", model.getNumber());
     }
@@ -52,7 +50,6 @@ class DocumentMapperTest {
 
         // Assert
         assertNotNull(dto);
-        assertEquals(1, dto.id());
         assertEquals(DocumentType.INTERNATIONAL_PASSPORT, dto.documentType());
         assertEquals("1234567890", dto.number());
     }

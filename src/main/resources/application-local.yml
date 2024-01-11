@@ -1,5 +1,5 @@
 app:
-  secret: some-secret-key-123
+  secret: some-secret-key1
 
 spring:
   datasource:

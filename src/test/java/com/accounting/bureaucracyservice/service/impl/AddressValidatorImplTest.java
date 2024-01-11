@@ -1,5 +1,6 @@
 package com.accounting.bureaucracyservice.service.impl;
 
+import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
@@ -13,8 +14,7 @@ class AddressValidatorImplTest {
 
     @Test
     public void validateSuccessfully() {
-        var dto = AddressDto.builder()
-                .id(1L)
+        var dto = AddressCreateDto.builder()
                 .region("Нижегородский")
                 .city("Нижний Новгород")
                 .street("Родионова")
@@ -28,6 +28,6 @@ class AddressValidatorImplTest {
     @Test
     public void validationFailedRequiredFieldIsNull() {
         assertThrows(BadRequestException.class,
-                () -> validator.validate(AddressDto.builder().build()));
+                () -> validator.validate(AddressCreateDto.builder().build()));
     }
 }
