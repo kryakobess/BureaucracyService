@@ -6,7 +6,7 @@ import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
 import com.accounting.bureaucracyservice.service.CitizenService;
-import com.accounting.bureaucracyservice.service.CitizenValidator;
+import com.accounting.bureaucracyservice.service.validator.CitizenValidator;
 import com.accounting.bureaucracyservice.service.mapper.CitizenMapper;
 import com.accounting.bureaucracyservice.service.repository.CitizenRepository;
 import com.accounting.bureaucracyservice.service.repository.DocumentRepository;
@@ -19,18 +19,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CitizenServiceImpl implements CitizenService {
 
-    private final CitizenValidator validator;
-    private final CitizenMapper mapper;
-    private final CitizenRepository repository;
+    private final CitizenValidator citizenValidator;
+    private final CitizenMapper citizenMapper;
+    private final CitizenRepository citizenRepository;
     private final DocumentRepository documentRepository;
 
     @Override
     public CitizenDto createCitizen(CitizenCreateDto citizenCreateDto) {
         log.info("Accounting new citizen");
-        validator.validate(citizenCreateDto);
-        Citizen citizen = mapper.toModel(citizenCreateDto);
+        citizenValidator.validate(citizenCreateDto);
+        Citizen citizen = citizenMapper.toModel(citizenCreateDto);
         checkCitizenToCreateAlreadyExists(citizen);
-        return mapper.toDto(repository.save(citizen));
+        return citizenMapper.toDto(citizenRepository.save(citizen));
     }
 
     private void checkCitizenToCreateAlreadyExists(Citizen citizen) {

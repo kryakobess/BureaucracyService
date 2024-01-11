@@ -1,8 +1,8 @@
 package com.accounting.bureaucracyservice.model.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
+import lombok.Builder;
 
+@Builder
 public record AddressDto(
         Long id,
         Integer index,

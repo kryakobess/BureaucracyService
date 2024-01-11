@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {DocumentMapper.class, AddressMapper.class})
 public abstract class CitizenMapper {
 
     @Autowired
@@ -28,7 +28,7 @@ public abstract class CitizenMapper {
     protected List<Document> getIdentityDocuments(CitizenCreateDto citizenCreateDto) {
         return List.of(Document.builder()
                 .documentType(DocumentType.IDENTITY_PASSPORT)
-                .number(citizenCreateDto.passportSeries() + citizenCreateDto.passportNumber())
+                .number(String.format("%d%d", citizenCreateDto.passportSeries().intValue(), citizenCreateDto.passportNumber().intValue()))
                 .build());
     }
 }

@@ -1,13 +1,16 @@
 package com.accounting.bureaucracyservice.model.dto;
 
-import java.util.Date;
+import lombok.Builder;
 
+import java.sql.Date;
+
+@Builder
 public record CitizenCreateDto(
         String firstName,
         String secondName,
         Date dateOfBirth,
-        String passportSeries,
-        String passportNumber,
+        Integer passportSeries,
+        Integer passportNumber,
         AddressDto registrationAddress
 ) {
 }

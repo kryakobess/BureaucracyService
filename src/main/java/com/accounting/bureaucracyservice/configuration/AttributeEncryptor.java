@@ -3,7 +3,6 @@ package com.accounting.bureaucracyservice.configuration;
 import jakarta.persistence.AttributeConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -16,7 +15,6 @@ import java.util.Base64;
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 
     private static final String ALGORITHM = "AES";
-
     private final Key key;
     private final Cipher cipher;
 
