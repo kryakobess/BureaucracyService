@@ -1,17 +1,16 @@
 package com.accounting.bureaucracyservice.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
-import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
 import com.accounting.bureaucracyservice.service.validator.AddressValidator;
+import com.accounting.bureaucracyservice.service.validator.impl.CitizenValidatorImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

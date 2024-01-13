@@ -52,7 +52,6 @@ class CitizenServiceTest {
         when(documentRepository.existsByNumberAndCitizen_FirstNameAndCitizen_SecondNameAndDocumentType(any(), any(), any(), any()))
                 .thenReturn(false);
         when(repository.save(any())).thenReturn(citizen);
-        when(mapper.toDto(any())).thenReturn(CitizenDto.builder().build());
         when(addressService.getOrSave(any())).thenReturn(new Address());
 
         citizenService.createCitizen(createDto);

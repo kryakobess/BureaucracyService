@@ -31,7 +31,7 @@ public class CitizenServiceImpl implements CitizenService {
 
     @Override
     @Transactional
-    public CitizenDto createCitizen(CitizenCreateDto citizenCreateDto) {
+    public Citizen createCitizen(CitizenCreateDto citizenCreateDto) {
         log.info("Accounting new citizen");
         citizenValidator.validate(citizenCreateDto);
         Citizen citizen = citizenMapper.toModel(citizenCreateDto);
@@ -40,7 +40,7 @@ public class CitizenServiceImpl implements CitizenService {
         citizen.setAddresses(List.of(addressService.getOrSave(citizenCreateDto.registrationAddress())));
         citizen.getDocuments().get(0).setCitizen(citizen);
 
-        return citizenMapper.toDto(citizenRepository.save(citizen));
+        return citizenRepository.save(citizen);
     }
 
     private void checkCitizenToCreateAlreadyExists(Citizen citizen) {

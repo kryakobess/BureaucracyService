@@ -1,4 +1,4 @@
-package com.accounting.bureaucracyservice.service.impl;
+package com.accounting.bureaucracyservice.service.validator.impl;
 
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;

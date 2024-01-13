@@ -1,9 +1,8 @@
 package com.accounting.bureaucracyservice.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
-import com.accounting.bureaucracyservice.model.dto.AddressDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
+import com.accounting.bureaucracyservice.service.validator.impl.AddressValidatorImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
