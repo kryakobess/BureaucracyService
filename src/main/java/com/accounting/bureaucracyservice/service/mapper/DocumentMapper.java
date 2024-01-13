@@ -5,6 +5,8 @@ import com.accounting.bureaucracyservice.model.entity.Document;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface DocumentMapper {
 
@@ -12,4 +14,6 @@ public interface DocumentMapper {
     Document toModel(DocumentDto dto);
 
     DocumentDto toDto(Document entity);
+
+    List<DocumentDto> toDtos(List<Document> entities);
 }

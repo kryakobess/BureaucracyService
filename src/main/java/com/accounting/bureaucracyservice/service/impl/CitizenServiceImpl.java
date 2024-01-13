@@ -37,7 +37,9 @@ public class CitizenServiceImpl implements CitizenService {
         Citizen citizen = citizenMapper.toModel(citizenCreateDto);
 
         checkCitizenToCreateAlreadyExists(citizen);
-        citizen.setAddresses(List.of(addressService.getOrSave(citizenCreateDto.registrationAddress())));
+        var registrationAddress = addressService.getOrSave(citizenCreateDto.registrationAddress());
+        citizen.setRegistrationAddress(registrationAddress);
+        citizen.setAddresses(List.of(registrationAddress));
         citizen.getDocuments().get(0).setCitizen(citizen);
 
         return citizenRepository.save(citizen);

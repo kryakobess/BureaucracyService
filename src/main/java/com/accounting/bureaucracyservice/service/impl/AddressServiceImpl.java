@@ -7,6 +7,7 @@ import com.accounting.bureaucracyservice.service.AddressService;
 import com.accounting.bureaucracyservice.service.mapper.AddressMapper;
 import com.accounting.bureaucracyservice.service.repository.AddressRepository;
 import com.accounting.bureaucracyservice.service.validator.AddressValidator;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,10 @@ public class AddressServiceImpl implements AddressService {
     public Address getOrSave(AddressCreateDto addressDto) {
         log.info("Checking for address: {}", addressDto);
         validator.validate(addressDto);
-        List<Address> accountedAddresses = addressRepository.findByRegionAndCityAndHouseNumber(
-                addressDto.region(), addressDto.city(), addressDto.houseNumber()
+
+        var accountedAddress = findAddressByRegionCityHouseAndApartmentIfExists(
+                addressDto.region(), addressDto.city(), addressDto.houseNumber(), addressDto.apartment()
         );
-        var accountedAddress = accountedAddresses.stream()
-                .filter(address -> address.getApartment().equals(addressDto.apartment()))
-                .findFirst().orElse(null);
 
         if (accountedAddress != null) {
             log.info("Found existing address with id {}", accountedAddress.getId());
@@ -41,6 +40,18 @@ public class AddressServiceImpl implements AddressService {
             log.info("Saving new address with id {}", addressToReturn.getId());
             return addressToReturn;
         }
+    }
+
+    private Address findAddressByRegionCityHouseAndApartmentIfExists(
+            String region,
+            String city,
+            String houseNumber,
+            @Nullable String apartment
+    ) {
+        List<Address> accountedAddresses = addressRepository.findByRegionAndCityAndHouseNumber(region, city, houseNumber);
+         return accountedAddresses.stream()
+                .filter(address -> address.getApartment().equals(apartment))
+                .findFirst().orElse(null);
     }
 
 }

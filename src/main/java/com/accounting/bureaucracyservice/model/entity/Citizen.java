@@ -28,12 +28,20 @@ public class Citizen {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    @Column(name = "phone_number")
+    @Convert(converter = AttributeEncryptor.class)
+    private String phoneNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "registration_address_id")
+    private Address registrationAddress;
+
     @OneToMany(mappedBy = "citizen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Document> documents;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "REGISTRATION_ADDRESS",
+            name = "CITIZEN_ADDRESS",
             joinColumns = {@JoinColumn(name = "CITIZEN_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ADDRESS_ID")}
     )

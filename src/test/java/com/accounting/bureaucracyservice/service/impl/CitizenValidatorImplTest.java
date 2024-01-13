@@ -33,6 +33,7 @@ class CitizenValidatorImplTest {
                 .secondName("Second")
                 .passportSeries(1234)
                 .passportNumber(567890)
+                .phoneNumber("+78005553535")
                 .registrationAddress(AddressCreateDto.builder().build())
                 .build();
 
@@ -53,6 +54,7 @@ class CitizenValidatorImplTest {
                 .secondName("Second")
                 .passportSeries(12345)
                 .passportNumber(567890)
+                .phoneNumber("+78005553535")
                 .registrationAddress(AddressCreateDto.builder().build())
                 .build();
 
@@ -68,6 +70,39 @@ class CitizenValidatorImplTest {
                 .secondName("Second")
                 .passportSeries(1234)
                 .passportNumber(5678490)
+                .phoneNumber("+78005553535")
+                .registrationAddress(AddressCreateDto.builder().build())
+                .build();
+
+        assertThrows(BadRequestException.class,
+                () -> validator.validate(dto));
+    }
+
+    @Test
+    public void invalidPhoneNumber_invalidRegionOfNumber() {
+        CitizenCreateDto dto = CitizenCreateDto.builder()
+                .dateOfBirth(LocalDate.now())
+                .firstName("First")
+                .secondName("Second")
+                .passportSeries(1234)
+                .passportNumber(5678490)
+                .phoneNumber("+32339998383")
+                .registrationAddress(AddressCreateDto.builder().build())
+                .build();
+
+        assertThrows(BadRequestException.class,
+                () -> validator.validate(dto));
+    }
+
+    @Test
+    public void invalidPhoneNumber_invalidCount() {
+        CitizenCreateDto dto = CitizenCreateDto.builder()
+                .dateOfBirth(LocalDate.now())
+                .firstName("First")
+                .secondName("Second")
+                .passportSeries(1234)
+                .passportNumber(5678490)
+                .phoneNumber("+3233998383")
                 .registrationAddress(AddressCreateDto.builder().build())
                 .build();
 

@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,10 +22,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CitizenMapperTest {
 
-    @Mock
+    @Spy
     private DocumentMapper documentMapper;
 
-    @Mock
+    @Spy
     private AddressMapper addressMapper;
 
     @Mock
@@ -37,11 +39,13 @@ class CitizenMapperTest {
 
     @Test
     public void shouldMapCitizenToDtoCorrectly() {
+
         // Arrange
         when(citizen.getId()).thenReturn(1L);
         when(citizen.getFirstName()).thenReturn("First");
         when(citizen.getSecondName()).thenReturn("Second");
         when(citizen.getDateOfBirth()).thenReturn(LocalDate.now());
+        when(citizen.getPhoneNumber()).thenReturn("+78005553535");
         when(citizen.isApprovedAccount()).thenReturn(true);
 
         // Act
@@ -52,6 +56,7 @@ class CitizenMapperTest {
         assertEquals(1, dto.id());
         assertEquals("First", dto.firstName());
         assertEquals("Second", dto.secondName());
+        assertEquals("+78005553535", dto.phoneNumber());
         assertTrue(dto.approvedAccount());
     }
 
@@ -60,9 +65,8 @@ class CitizenMapperTest {
         // Arrange
         when(citizenCreateDto.firstName()).thenReturn("First");
         when(citizenCreateDto.secondName()).thenReturn("Second");
+        when(citizenCreateDto.phoneNumber()).thenReturn("+78005553535");
         when(citizenCreateDto.dateOfBirth()).thenReturn(LocalDate.now());
-        when(citizenCreateDto.registrationAddress()).thenReturn(AddressCreateDto.builder().build());
-        when(addressMapper.toModel(any())).thenReturn(new Address());
 
         // Act
         Citizen model = citizenMapper.toModel(citizenCreateDto);
@@ -71,6 +75,7 @@ class CitizenMapperTest {
         assertNotNull(model);
         assertEquals("First", model.getFirstName());
         assertEquals("Second", model.getSecondName());
+        assertEquals("+78005553535", model.getPhoneNumber());
         assertFalse(model.isApprovedAccount());
     }
 

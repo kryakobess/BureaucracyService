@@ -13,20 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {DocumentMapper.class, AddressMapper.class})
-public abstract class CitizenMapper {
+public interface CitizenMapper {
 
-    @Autowired
-    protected AddressMapper addressMapper;
-
-    public abstract CitizenDto toDto(Citizen entity);
+    CitizenDto toDto(Citizen entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approvedAccount", ignore = true)
+    @Mapping(target = "addresses", ignore = true)
+    @Mapping(target = "registrationAddress", ignore = true)
     @Mapping(target = "documents", expression = "java(getIdentityDocuments(citizenCreateDto))")
-    @Mapping(target = "addresses", expression = "java(java.util.List.of(addressMapper.toModel(citizenCreateDto.registrationAddress())))")
-    public abstract Citizen toModel(CitizenCreateDto citizenCreateDto);
+    Citizen toModel(CitizenCreateDto citizenCreateDto);
 
-    protected List<Document> getIdentityDocuments(CitizenCreateDto citizenCreateDto) {
+    default List<Document> getIdentityDocuments(CitizenCreateDto citizenCreateDto) {
         return List.of(Document.builder()
                 .documentType(DocumentType.IDENTITY_PASSPORT)
                 .number(String.format("%d%d", citizenCreateDto.passportSeries().intValue(), citizenCreateDto.passportNumber().intValue()))

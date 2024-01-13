@@ -12,7 +12,9 @@ public record CitizenDto(
         String firstName,
         String secondName,
         LocalDate dateOfBirth,
+        String phoneNumber,
         List<DocumentDto> documents,
+        AddressDto registrationAddress,
         List<AddressDto> addresses,
         boolean approvedAccount
 ) {
