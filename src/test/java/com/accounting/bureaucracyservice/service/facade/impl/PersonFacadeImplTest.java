@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +41,19 @@ class PersonFacadeImplTest {
         personFacade.createPerson(createDto);
 
         verify(citizenService).createCitizen(createDto);
+        verify(citizenMapper).toDto(citizen);
+    }
+
+    @Test
+    void getPersonById() {
+        long id = 1L;
+        var citizen = new Citizen();
+        when(citizenService.getCitizenById(anyLong())).thenReturn(citizen);
+        when(citizenMapper.toDto(any())).thenReturn(CitizenDto.builder().build());
+
+        personFacade.getPersonById(id);
+
+        verify(citizenService).getCitizenById(id);
         verify(citizenMapper).toDto(citizen);
     }
 }

@@ -7,6 +7,7 @@ import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.entity.Document;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
+import com.accounting.bureaucracyservice.model.exceptions.NotFoundException;
 import com.accounting.bureaucracyservice.service.AddressService;
 import com.accounting.bureaucracyservice.service.impl.CitizenServiceImpl;
 import com.accounting.bureaucracyservice.service.mapper.CitizenMapper;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -100,5 +102,23 @@ class CitizenServiceTest {
 
         verify(documentRepository).existsByNumberAndCitizen_FirstNameAndCitizen_SecondNameAndDocumentType(number, firstName, secondName, DocumentType.IDENTITY_PASSPORT);
         assertTrue(res);
+    }
+
+    @Test
+    void getCitizenById_Successfully() {
+        when(repository.findById(any())).thenReturn(Optional.of(new Citizen()));
+
+        assertDoesNotThrow(() -> citizenService.getCitizenById(1L));
+
+        verify(repository).findById(1L);
+    }
+
+    @Test
+    void getCitizenById_NotFound() {
+        when(repository.findById(any())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> citizenService.getCitizenById(1L));
+
+        verify(repository).findById(1L);
     }
 }

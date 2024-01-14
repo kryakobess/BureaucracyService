@@ -2,6 +2,7 @@ package com.accounting.bureaucracyservice.controller.advice;
 
 import com.accounting.bureaucracyservice.model.dto.ApiError;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
+import com.accounting.bureaucracyservice.model.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,9 +13,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class BureaucracyControllerAdvice {
 
     @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> processBadRequest(Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
+        return getResponseWithErrorStatus(HttpStatus.BAD_REQUEST, e);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> processNotFound(Exception e) {
+        return getResponseWithErrorStatus(HttpStatus.NOT_FOUND, e);
+    }
+
+    private ResponseEntity<ApiError> getResponseWithErrorStatus(HttpStatus httpStatus, Exception e) {
+        return ResponseEntity.status(httpStatus)
+                .body(new ApiError(httpStatus.getReasonPhrase(), e.getMessage()));
     }
 }

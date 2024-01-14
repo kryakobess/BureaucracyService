@@ -23,4 +23,10 @@ public class PersonFacadeImpl implements PersonFacade {
         log.info("Post request createPerson for citizen - {} {}", createDto.firstName(), createDto.secondName());
         return citizenMapper.toDto(citizenService.createCitizen(createDto));
     }
+
+    @Override
+    public CitizenDto getPersonById(long id) {
+        log.info("Get request getPersonById for citizen with id - {}", id);
+        return citizenMapper.toDto(citizenService.getCitizenById(id));
+    }
 }

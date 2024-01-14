@@ -5,6 +5,7 @@ import com.accounting.bureaucracyservice.model.dto.CitizenDto;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
+import com.accounting.bureaucracyservice.model.exceptions.NotFoundException;
 import com.accounting.bureaucracyservice.service.AddressService;
 import com.accounting.bureaucracyservice.service.CitizenService;
 import com.accounting.bureaucracyservice.service.validator.CitizenValidator;
@@ -61,6 +62,12 @@ public class CitizenServiceImpl implements CitizenService {
                 secondName,
                 DocumentType.IDENTITY_PASSPORT
         );
+    }
+
+    @Override
+    public Citizen getCitizenById(long id) {
+        return citizenRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Citizen with id=%d does not exist", id)));
     }
 
 }
