@@ -18,11 +18,13 @@ jacoco {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestCoverageVerification
     finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
     reports {
+        xml.required = true
         html.destination file("${buildDir}/reports/coverage")
         xml.destination file("${buildDir}/reports/jacoco.xml")
     }
@@ -32,6 +34,7 @@ jacocoTestReport {
                     excludes: [
                             "**/generated/*",
                             "**/model/*",
+                            "**/controller/advice/*",
                             "**/configuration/*"
                     ]
             )
@@ -53,6 +56,7 @@ jacocoTestCoverageVerification {
                      excludes: [
                              "**/generated/*",
                              "**/model/*",
+                             "**/controller/advice/*",
                              "**/configuration/*"
                      ]
             )

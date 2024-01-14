@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,5 +31,15 @@ class PersonControllerTest {
         personController.createPerson(createDto);
 
         verify(personFacade).createPerson(createDto);
+    }
+
+    @Test
+    void getPersonById() {
+        long id = 1L;
+        when(personFacade.getPersonById(anyLong())).thenReturn(CitizenDto.builder().build());
+
+        personController.getPersonById(id);
+
+        verify(personFacade).getPersonById(id);
     }
 }
