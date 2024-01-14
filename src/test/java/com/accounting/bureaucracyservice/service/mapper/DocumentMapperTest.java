@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -70,5 +72,23 @@ class DocumentMapperTest {
 
         // Assert
         assertNull(dto);
+    }
+
+    @Test
+    public void toDtos() {
+        List<Document> documents = List.of(new Document());
+
+        var res = documentMapper.toDtos(documents);
+
+        assertEquals(1, res.size());
+    }
+
+    @Test
+    public void toDtos_IsNull() {
+        List<Document> documents = null;
+
+        var res = documentMapper.toDtos(documents);
+
+        assertNull(res);
     }
 }

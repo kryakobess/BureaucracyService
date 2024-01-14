@@ -1,4 +1,4 @@
-package com.accounting.bureaucracyservice.service.impl;
+package com.accounting.bureaucracyservice.service.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;

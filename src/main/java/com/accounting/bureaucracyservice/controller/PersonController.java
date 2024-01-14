@@ -10,8 +10,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,5 +51,20 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<CitizenDto> getPersonById(@PathVariable long id) {
         return ResponseEntity.ok(personFacade.getPersonById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<CitizenDto>> getPersons(
+            @RequestParam(name = "ids", required = false) List<Long> ids,
+            @RequestParam(name = "firstName", required = false) List<String> firstNames,
+            @RequestParam(name = "secondName", required = false) List<String> secondNames,
+            @RequestParam(name = "registrationAddressRegions", required = false) List<String> regions,
+            @RequestParam(name = "registrationAddressCities", required = false) List<String> cities,
+            @RequestParam(name = "registrationAddressStreets", required = false) List<String> streets,
+            @RequestParam(name = "registrationAddressHouseNumbers", required = false) List<String> houseNumbers,
+            @RequestParam(name = "registrationAddressApartments", required = false) List<String> apartments,
+            @PageableDefault(size = 20) Pageable pageable
+    ) {
+        return ResponseEntity.ok(personFacade.getCitizenPages(ids, firstNames, secondNames, regions, cities, streets, houseNumbers, apartments, pageable));
     }
 }

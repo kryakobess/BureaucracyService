@@ -1,25 +1,32 @@
-package com.accounting.bureaucracyservice.service.impl;
+package com.accounting.bureaucracyservice.service.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.entity.Document;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
 import com.accounting.bureaucracyservice.model.exceptions.NotFoundException;
-import com.accounting.bureaucracyservice.service.AddressService;
-import com.accounting.bureaucracyservice.service.impl.CitizenServiceImpl;
+import com.accounting.bureaucracyservice.model.filters.CitizenQueryFilter;
+import com.accounting.bureaucracyservice.service.service.AddressService;
 import com.accounting.bureaucracyservice.service.mapper.CitizenMapper;
 import com.accounting.bureaucracyservice.service.repository.CitizenRepository;
 import com.accounting.bureaucracyservice.service.repository.DocumentRepository;
+import com.accounting.bureaucracyservice.service.service.PredicateCreationService;
+import com.accounting.bureaucracyservice.service.service.impl.CitizenServiceImpl;
 import com.accounting.bureaucracyservice.service.validator.CitizenValidator;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +47,8 @@ class CitizenServiceTest {
     private CitizenRepository repository;
     @Mock
     private DocumentRepository documentRepository;
+    @Mock
+    private PredicateCreationService predicateCreationService;
     @InjectMocks
     private CitizenServiceImpl citizenService;
 
@@ -120,5 +129,32 @@ class CitizenServiceTest {
         assertThrows(NotFoundException.class, () -> citizenService.getCitizenById(1L));
 
         verify(repository).findById(1L);
+    }
+
+    @Test
+    void getCitizenPage_shouldFilter() {
+        CitizenQueryFilter queryFilter = CitizenQueryFilter.builder().ids(List.of(1L)).build();
+        Pageable request = PageRequest.of(1, 1);
+        Predicate predicate = new BooleanBuilder();
+
+        when(predicateCreationService.getCitizenQueryFilterPredicate(any())).thenReturn(predicate);
+        when(repository.findAll(any(Predicate.class), any(Pageable.class))).thenReturn(Page.empty());
+
+        citizenService.getCitizensPage(queryFilter, request);
+
+        verify(predicateCreationService).getCitizenQueryFilterPredicate(queryFilter);
+        verify(repository).findAll(predicate, request);
+    }
+
+    @Test
+    void getCitizenPage_shouldNotFilter() {
+        CitizenQueryFilter queryFilter = new CitizenQueryFilter();
+        Pageable request = PageRequest.of(1, 1);
+
+        when(repository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+
+        citizenService.getCitizensPage(queryFilter, request);
+
+        verify(repository).findAll(request);
     }
 }
