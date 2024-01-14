@@ -1,0 +1,2 @@
+ALTER TABLE CITIZEN
+    ADD COLUMN IS_APPROVED bool default false;
