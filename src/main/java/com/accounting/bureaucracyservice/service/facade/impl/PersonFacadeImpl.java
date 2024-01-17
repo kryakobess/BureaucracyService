@@ -48,6 +48,18 @@ public class PersonFacadeImpl implements PersonFacade {
             List<String> apartments,
             Pageable pageable
     ) {
+        log.info("""
+                Get request getCitizenPages with values:
+                ids: {},
+                firstNames: {},
+                secondNames: {},
+                regions: {},
+                cities: {},
+                streets: {},
+                houseNumbers: {},
+                apartments: {}
+                """, ids, firstNames, secondNames, regions, cities, streets, houseNumbers, apartments);
+
         var registrationAddressQueryFilter = AddressQueryFilter.builder()
                 .regions(regions)
                 .cities(cities)
