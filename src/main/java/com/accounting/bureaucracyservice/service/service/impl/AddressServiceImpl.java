@@ -1,9 +1,8 @@
-package com.accounting.bureaucracyservice.service.impl;
+package com.accounting.bureaucracyservice.service.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
-import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
-import com.accounting.bureaucracyservice.service.AddressService;
+import com.accounting.bureaucracyservice.service.service.AddressService;
 import com.accounting.bureaucracyservice.service.mapper.AddressMapper;
 import com.accounting.bureaucracyservice.service.repository.AddressRepository;
 import com.accounting.bureaucracyservice.service.validator.AddressValidator;
@@ -29,7 +28,11 @@ public class AddressServiceImpl implements AddressService {
         validator.validate(addressDto);
 
         var accountedAddress = findAddressByRegionCityHouseAndApartmentIfExists(
-                addressDto.region(), addressDto.city(), addressDto.houseNumber(), addressDto.apartment()
+                addressDto.region(),
+                addressDto.city(),
+                addressDto.street(),
+                addressDto.houseNumber(),
+                addressDto.apartment()
         );
 
         if (accountedAddress != null) {
@@ -45,10 +48,11 @@ public class AddressServiceImpl implements AddressService {
     private Address findAddressByRegionCityHouseAndApartmentIfExists(
             String region,
             String city,
+            String street,
             String houseNumber,
             @Nullable String apartment
     ) {
-        List<Address> accountedAddresses = addressRepository.findByRegionAndCityAndHouseNumber(region, city, houseNumber);
+        List<Address> accountedAddresses = addressRepository.findByRegionAndCityAndStreetAndHouseNumber(region, city, street, houseNumber);
          return accountedAddresses.stream()
                 .filter(address -> address.getApartment().equals(apartment))
                 .findFirst().orElse(null);

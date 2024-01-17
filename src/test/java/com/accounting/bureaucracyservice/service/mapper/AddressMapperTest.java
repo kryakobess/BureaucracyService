@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -69,5 +71,23 @@ class AddressMapperTest {
         AddressDto dto = addressMapper.toDto(null);
 
         assertNull(dto);
+    }
+
+    @Test
+    public void toDtos() {
+        List<Address> addresses = List.of(new Address());
+
+        var res = addressMapper.toDtos(addresses);
+
+        assertEquals(1, res.size());
+    }
+
+    @Test
+    public void toDtos_IsNull() {
+        List<Address> addresses = null;
+
+        var res = addressMapper.toDtos(addresses);
+
+        assertNull(res);
     }
 }
