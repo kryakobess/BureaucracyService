@@ -4,8 +4,6 @@ import com.accounting.bureaucracyservice.model.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface PersonFacade {
     CitizenDto createPerson(CitizenCreateDto createDto);
 
@@ -23,4 +21,10 @@ public interface PersonFacade {
     AddressesGetDto unlinkAddress(Long id, Long addressId);
 
     AddressesGetDto changeAddress(Long id, Long addressId, AddressCreateDto addressCreateDto);
+
+    DocumentDto addDocument(Long id, DocumentCreateDto dto);
+
+    DocumentDto changeDocument(Long id, DocumentCreateDto createDto);
+
+    DocumentsGetDto getDocuments(Long id);
 }

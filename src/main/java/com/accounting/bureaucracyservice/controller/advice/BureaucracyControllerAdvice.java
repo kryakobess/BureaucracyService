@@ -22,6 +22,11 @@ public class BureaucracyControllerAdvice {
         return getResponseWithErrorStatus(HttpStatus.NOT_FOUND, e);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> processInternalError(Exception e) {
+        return getResponseWithErrorStatus(HttpStatus.INTERNAL_SERVER_ERROR, e);
+    }
+
     private ResponseEntity<ApiError> getResponseWithErrorStatus(HttpStatus httpStatus, Exception e) {
         return ResponseEntity.status(httpStatus)
                 .body(new ApiError(httpStatus.getReasonPhrase(), e.getMessage()));

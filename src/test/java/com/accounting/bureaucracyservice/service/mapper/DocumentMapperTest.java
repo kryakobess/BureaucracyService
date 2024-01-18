@@ -1,5 +1,6 @@
 package com.accounting.bureaucracyservice.service.mapper;
 
+import com.accounting.bureaucracyservice.model.dto.DocumentCreateDto;
 import com.accounting.bureaucracyservice.model.dto.DocumentDto;
 import com.accounting.bureaucracyservice.model.entity.Document;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.when;
 class DocumentMapperTest {
 
     @Mock
-    private DocumentDto documentDto;
+    private DocumentCreateDto documentDto;
 
     @Mock
     private Document document;
@@ -28,7 +29,7 @@ class DocumentMapperTest {
     @Test
     public void shouldMapDocumentDtoToModelCorrectly() {
         // Arrange
-        when(documentDto.documentType()).thenReturn(DocumentType.DRIVER_LICENCE);
+        when(documentDto.documentType()).thenReturn(String.valueOf(DocumentType.DRIVER_LICENCE));
         when(documentDto.number()).thenReturn("1234567890");
 
         // Act

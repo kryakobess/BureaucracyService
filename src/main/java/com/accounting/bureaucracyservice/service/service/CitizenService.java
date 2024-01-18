@@ -2,6 +2,7 @@ package com.accounting.bureaucracyservice.service.service;
 
 import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
+import com.accounting.bureaucracyservice.model.dto.DocumentCreateDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.filters.CitizenQueryFilter;

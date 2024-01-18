@@ -64,7 +64,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Address linked",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CitizenDto.class)) }),
+                            schema = @Schema(implementation = AddressesGetDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Citizen with given id is not found",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiError.class)) }),
@@ -81,7 +81,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CitizenDto.class)) }),
+                            schema = @Schema(implementation = AddressesGetDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Citizen with given id is not found",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiError.class)) })
@@ -95,7 +95,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Address unlinked",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CitizenDto.class)) }),
+                            schema = @Schema(implementation = AddressesGetDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiError.class)) }),
@@ -112,7 +112,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Address changed",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CitizenDto.class)) }),
+                            schema = @Schema(implementation = AddressesGetDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiError.class)) }),
@@ -127,5 +127,59 @@ public class PersonController {
             @RequestBody AddressCreateDto addressCreateDto
     ) {
         return ResponseEntity.ok(personFacade.changeAddress(id, addressId, addressCreateDto));
+    }
+
+    @Operation(summary = "Add citizen document")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Document changed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DocumentDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) })
+    })
+    @PostMapping("/{id}/document")
+    public ResponseEntity<DocumentDto> addDocument(@PathVariable Long id, @RequestBody DocumentCreateDto dto) {
+        return ResponseEntity.ok(personFacade.addDocument(id, dto));
+    }
+
+    @Operation(summary = "Change citizen document")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Document changed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DocumentDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) })
+    })
+    @PatchMapping("/{id}/document")
+    public ResponseEntity<DocumentDto> changeDocument(
+            @PathVariable Long id,
+            @RequestBody DocumentCreateDto createDto
+    ) {
+        return ResponseEntity.ok(personFacade.changeDocument(id, createDto));
+    }
+
+    @Operation(summary = "Get citizen documents")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DocumentsGetDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) })
+    })
+    @GetMapping("/{id}/document")
+    public ResponseEntity<DocumentsGetDto> getDocuments(@PathVariable Long id) {
+        return ResponseEntity.ok(personFacade.getDocuments(id));
     }
 }

@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     boolean existsByNumberAndCitizen_FirstNameAndCitizen_SecondNameAndDocumentType(String number, String firstName, String secondName, DocumentType documentType);
+
+    boolean existsByNumberAndDocumentType(String number, DocumentType documentType);
 }

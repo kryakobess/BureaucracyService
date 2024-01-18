@@ -7,6 +7,7 @@ import lombok.Builder;
 public record DocumentDto(
         Long id,
         DocumentType documentType,
-        String number
+        String number,
+        Long citizenId
 ) {
 }

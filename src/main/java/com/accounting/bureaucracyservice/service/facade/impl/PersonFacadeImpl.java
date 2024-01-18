@@ -5,16 +5,16 @@ import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.filters.AddressQueryFilter;
 import com.accounting.bureaucracyservice.model.filters.CitizenQueryFilter;
 import com.accounting.bureaucracyservice.service.mapper.AddressMapper;
+import com.accounting.bureaucracyservice.service.mapper.DocumentMapper;
 import com.accounting.bureaucracyservice.service.service.CitizenService;
 import com.accounting.bureaucracyservice.service.facade.PersonFacade;
 import com.accounting.bureaucracyservice.service.mapper.CitizenMapper;
+import com.accounting.bureaucracyservice.service.service.DocumentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 @Slf4j
@@ -26,6 +26,10 @@ public class PersonFacadeImpl implements PersonFacade {
     private final CitizenMapper citizenMapper;
 
     private final AddressMapper addressMapper;
+
+    private final DocumentService documentService;
+
+    private final DocumentMapper documentMapper;
 
     @Override
     public CitizenDto createPerson(CitizenCreateDto createDto) {
@@ -90,6 +94,26 @@ public class PersonFacadeImpl implements PersonFacade {
         log.info("Put request changeAddress with addressId={} for citizen with id={}", addressId, id);
         var citizen = citizenService.changeAddress(id, addressId, addressCreateDto);
         return mapCitizenToAddressGetDto(citizen);
+    }
+
+    @Override
+    public DocumentDto addDocument(Long id, DocumentCreateDto dto) {
+        log.info("Post request addDocument for citizen with id={}", id);
+        return documentMapper.toDto(documentService.addDocumentToCitizen(id, dto));
+    }
+
+    @Override
+    public DocumentDto changeDocument(Long id, DocumentCreateDto createDto) {
+        log.info("Patch request changeDocument with documentType={} for citizen with id={}", createDto.documentType(), id);
+        return documentMapper.toDto(documentService.changeDocument(id, createDto));
+    }
+
+    @Override
+    public DocumentsGetDto getDocuments(Long id) {
+        log.info("Get request getDocuments for citizen with id={}", id);
+        var citizen = citizenService.getCitizenById(id);
+        var documents = citizen.getDocuments();
+        return documentMapper.toDocumentsGetDto(citizen.getId(), documents);
     }
 
     private AddressesGetDto mapCitizenToAddressGetDto(Citizen citizen) {
