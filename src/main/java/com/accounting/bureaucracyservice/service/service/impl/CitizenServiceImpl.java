@@ -1,6 +1,8 @@
 package com.accounting.bureaucracyservice.service.service.impl;
 
+import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
+import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -44,7 +47,7 @@ public class CitizenServiceImpl implements CitizenService {
         checkCitizenToCreateAlreadyExists(citizen);
         var registrationAddress = addressService.getOrSave(citizenCreateDto.registrationAddress());
         citizen.setRegistrationAddress(registrationAddress);
-        citizen.setAddresses(List.of(registrationAddress));
+        citizen.setAddresses(Set.of(registrationAddress));
         citizen.getDocuments().get(0).setCitizen(citizen);
 
         return citizenRepository.save(citizen);
@@ -80,5 +83,51 @@ public class CitizenServiceImpl implements CitizenService {
             return citizenRepository.findAll(predicateCreationService.getCitizenQueryFilterPredicate(queryFilter), pageable);
         }
         return citizenRepository.findAll(pageable);
+    }
+
+    @Override
+    @Transactional
+    public Citizen addAddressToCitizen(AddressCreateDto addressDto, Long citizenId) {
+        var citizen = getCitizenById(citizenId);
+        var address = addressService.getOrSave(addressDto);
+        citizen.getAddresses().add(address);
+        return citizen;
+    }
+
+    @Override
+    @Transactional
+    public Citizen unlinkAddressFromCitizen(Long citizenId, Long addressId) {
+        var citizen = getCitizenById(citizenId);
+        var registrationAddress = citizen.getRegistrationAddress();
+        var addressToUnlink = findAddressForCitizenById(citizen, addressId);
+
+        if (registrationAddress.getId().equals(addressToUnlink.getId())) {
+            throw new BadRequestException("Cannot unlink registration address");
+        }
+        citizen.getAddresses().remove(addressToUnlink);
+        return citizen;
+    }
+
+    @Override
+    @Transactional
+    public Citizen changeAddress(Long citizenId, Long addressId, AddressCreateDto addressCreateDto) {
+        var citizen = getCitizenById(citizenId);
+        var registrationAddress = citizen.getRegistrationAddress();
+        var addressToChange = findAddressForCitizenById(citizen, addressId);
+        var newAddress = addressService.getOrSave(addressCreateDto);
+
+        if (addressToChange.getId().equals(registrationAddress.getId())) {
+            citizen.setRegistrationAddress(newAddress);
+        }
+        citizen.getAddresses().remove(addressToChange);
+        citizen.getAddresses().add(newAddress);
+        return citizen;
+    }
+
+    private Address findAddressForCitizenById(Citizen citizen, Long addressId) {
+        return citizen.getAddresses().stream()
+                .filter(address -> address.getId().equals(addressId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format("Address with id=%d does not linked to citizen with id=%d", addressId, citizen.getId())));
     }
 }

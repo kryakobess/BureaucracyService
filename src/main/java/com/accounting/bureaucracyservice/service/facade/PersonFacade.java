@@ -1,7 +1,6 @@
 package com.accounting.bureaucracyservice.service.facade;
 
-import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenDto;
+import com.accounting.bureaucracyservice.model.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,14 +12,15 @@ public interface PersonFacade {
     CitizenDto getPersonById(long id);
 
     Page<CitizenDto> getCitizenPages(
-            List<Long> ids,
-            List<String> firstNames,
-            List<String> secondNames,
-            List<String> regions,
-            List<String> cities,
-            List<String> streets,
-            List<String> houseNumbers,
-            List<String> apartments,
+            CitizenPageableDto citizenPageableDto,
             Pageable pageable
     );
+
+    AddressesGetDto addAddress(Long id, AddressCreateDto addressCreateDto);
+
+    AddressesGetDto getAddress(Long id);
+
+    AddressesGetDto unlinkAddress(Long id, Long addressId);
+
+    AddressesGetDto changeAddress(Long id, Long addressId, AddressCreateDto addressCreateDto);
 }
