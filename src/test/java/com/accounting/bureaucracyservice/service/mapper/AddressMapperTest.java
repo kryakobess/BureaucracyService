@@ -90,4 +90,29 @@ class AddressMapperTest {
 
         assertNull(res);
     }
+
+    @Test
+    public void toAddressesGetDto() {
+        Long id = 1L;
+        Address address = new Address();
+        address.setId(1L);
+        List<Address> addresses = List.of(address);
+
+        var res = addressMapper.toAddressesGetDto(id, address, addresses);
+
+        assertEquals(id, res.citizenId());
+        assertEquals(address.getId(), res.registrationAddress().id());
+        assertEquals(1, res.addresses().size());
+    }
+
+    @Test
+    public void toAddressesGetDto_IsNull() {
+        Long id = null;
+        Address address = null;
+        List<Address> addresses = null;
+
+        var res = addressMapper.toAddressesGetDto(id, address, addresses);
+
+        assertNull(res);
+    }
 }

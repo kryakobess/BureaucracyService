@@ -1,7 +1,6 @@
 package com.accounting.bureaucracyservice.controller;
 
-import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenDto;
+import com.accounting.bureaucracyservice.model.dto.*;
 import com.accounting.bureaucracyservice.service.facade.PersonFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,20 +51,57 @@ class PersonControllerTest {
 
     @Test
     void getPages() {
-        List<Long> ids = emptyList();
-        List<String> firstNames = emptyList();
-        List<String> secondNames = emptyList();
-        List<String> regRegions = emptyList();
-        List<String> regCities = emptyList();
-        List<String> regStreets = emptyList();
-        List<String> regHouses = emptyList();
-        List<String> regApartments = emptyList();
+        CitizenPageableDto citizenPageableDto = CitizenPageableDto.builder().build();
         Pageable pageable = PageRequest.of(1, 1);
 
-        when(personFacade.getCitizenPages(any(), any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(Page.empty());
+        when(personFacade.getCitizenPages(any(), any())).thenReturn(Page.empty());
 
-        personController.getPersons(ids, firstNames, secondNames, regRegions, regCities, regStreets, regHouses, regApartments, pageable);
+        personController.getPersons(citizenPageableDto, pageable);
 
-        verify(personFacade).getCitizenPages(ids, firstNames, secondNames, regRegions, regCities, regStreets, regHouses, regApartments, pageable);
+        verify(personFacade).getCitizenPages(citizenPageableDto, pageable);
+    }
+
+    @Test
+    void addAddress() {
+        AddressCreateDto dto = AddressCreateDto.builder().build();
+        Long id = 1L;
+        when(personFacade.addAddress(anyLong(), any())).thenReturn(AddressesGetDto.builder().build());
+
+        personController.addAddress(id, dto);
+
+        verify(personFacade).addAddress(id, dto);
+    }
+
+    @Test
+    void getAddresses() {
+        Long id = 1L;
+        when(personFacade.getAddress(anyLong())).thenReturn(AddressesGetDto.builder().build());
+
+        personController.getAddresses(id);
+
+        verify(personFacade).getAddress(id);
+    }
+
+    @Test
+    void unlinkAddress() {
+        Long id = 1L;
+        Long addrId = 1L;
+        when(personFacade.unlinkAddress(anyLong(), anyLong())).thenReturn(AddressesGetDto.builder().build());
+
+        personController.unlinkAddressFromCitizen(id, addrId);
+
+        verify(personFacade).unlinkAddress(id, addrId);
+    }
+
+    @Test
+    void putAddress() {
+        AddressCreateDto dto = AddressCreateDto.builder().build();
+        Long id = 1L;
+        Long addrId = 1L;
+        when(personFacade.changeAddress(anyLong(), anyLong(), any())).thenReturn(AddressesGetDto.builder().build());
+
+        personController.changeAddressForCitizen(id, addrId, dto);
+
+        verify(personFacade).changeAddress(id, addrId, dto);
     }
 }

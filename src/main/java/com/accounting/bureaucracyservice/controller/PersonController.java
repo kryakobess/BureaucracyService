@@ -1,8 +1,6 @@
 package com.accounting.bureaucracyservice.controller;
 
-import com.accounting.bureaucracyservice.model.dto.ApiError;
-import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenDto;
+import com.accounting.bureaucracyservice.model.dto.*;
 import com.accounting.bureaucracyservice.service.facade.PersonFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,7 +30,7 @@ public class PersonController {
                             schema = @Schema(implementation = CitizenDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ApiError.class)) }),
+                            schema = @Schema(implementation = ApiError.class)) })
     })
     @PostMapping
     public ResponseEntity<CitizenDto> createPerson(@RequestBody CitizenCreateDto citizenCreateDto) {
@@ -46,25 +44,88 @@ public class PersonController {
                             schema = @Schema(implementation = CitizenDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ApiError.class)) }),
+                            schema = @Schema(implementation = ApiError.class)) })
     })
     @GetMapping("/{id}")
     public ResponseEntity<CitizenDto> getPersonById(@PathVariable long id) {
         return ResponseEntity.ok(personFacade.getPersonById(id));
     }
 
+    @Operation(summary = "Get all citizens filtered and pageable")
     @GetMapping
     public ResponseEntity<Page<CitizenDto>> getPersons(
-            @RequestParam(name = "ids", required = false) List<Long> ids,
-            @RequestParam(name = "firstName", required = false) List<String> firstNames,
-            @RequestParam(name = "secondName", required = false) List<String> secondNames,
-            @RequestParam(name = "registrationAddressRegions", required = false) List<String> regions,
-            @RequestParam(name = "registrationAddressCities", required = false) List<String> cities,
-            @RequestParam(name = "registrationAddressStreets", required = false) List<String> streets,
-            @RequestParam(name = "registrationAddressHouseNumbers", required = false) List<String> houseNumbers,
-            @RequestParam(name = "registrationAddressApartments", required = false) List<String> apartments,
+            CitizenPageableDto citizenPageableDto,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        return ResponseEntity.ok(personFacade.getCitizenPages(ids, firstNames, secondNames, regions, cities, streets, houseNumbers, apartments, pageable));
+        return ResponseEntity.ok(personFacade.getCitizenPages(citizenPageableDto, pageable));
+    }
+
+    @Operation(summary = "Add address to existing citizen by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Address linked",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CitizenDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Citizen with given id is not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) })
+    })
+    @PostMapping("/{id}/address")
+    public ResponseEntity<AddressesGetDto> addAddress(@PathVariable Long id, @RequestBody AddressCreateDto addressCreateDto) {
+        return ResponseEntity.ok(personFacade.addAddress(id, addressCreateDto));
+    }
+
+    @Operation(summary = "Get all citizen addresses by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CitizenDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Citizen with given id is not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) })
+    })
+    @GetMapping("/{id}/address")
+    public ResponseEntity<AddressesGetDto> getAddresses(@PathVariable Long id) {
+        return ResponseEntity.ok(personFacade.getAddress(id));
+    }
+
+    @Operation(summary = "Unlink address from citizen by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Address unlinked",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CitizenDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) })
+    })
+    @DeleteMapping("/{id}/address/{addressId}/unlink")
+    public ResponseEntity<AddressesGetDto> unlinkAddressFromCitizen(@PathVariable Long id, @PathVariable Long addressId) {
+        return ResponseEntity.ok(personFacade.unlinkAddress(id, addressId));
+    }
+
+    @Operation(summary = "Change citizen address specified by addressId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Address changed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CitizenDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiError.class)) })
+    })
+    @PutMapping("/{id}/address/{addressId}")
+    public ResponseEntity<AddressesGetDto> changeAddressForCitizen(
+            @PathVariable Long id,
+            @PathVariable Long addressId,
+            @RequestBody AddressCreateDto addressCreateDto
+    ) {
+        return ResponseEntity.ok(personFacade.changeAddress(id, addressId, addressCreateDto));
     }
 }

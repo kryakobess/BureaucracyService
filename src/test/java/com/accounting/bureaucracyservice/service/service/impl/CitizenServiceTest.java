@@ -1,5 +1,7 @@
 package com.accounting.bureaucracyservice.service.service.impl;
 
+import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
+import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
@@ -156,5 +158,74 @@ class CitizenServiceTest {
         citizenService.getCitizensPage(queryFilter, request);
 
         verify(repository).findAll(request);
+    }
+
+    @Test
+    void addAddress() {
+        AddressCreateDto addressDto = AddressCreateDto.builder().build();
+        Long id = 1L;
+        when(repository.findById(anyLong())).thenReturn(Optional.of(new Citizen()));
+        when(addressService.getOrSave(any())).thenReturn(new Address());
+
+        citizenService.addAddressToCitizen(addressDto, id);
+
+        verify(repository).findById(id);
+        verify(addressService).getOrSave(addressDto);
+    }
+
+    @Test
+    void unlinkAddressFromCitizen() {
+        Long citizenId = 1L;
+        Long addressId = 1L;
+        Address regAddress = new Address();
+        regAddress.setId(2L);
+        Address address = new Address();
+        address.setId(addressId);
+        Citizen citizen = new Citizen();
+        citizen.setRegistrationAddress(regAddress);
+        citizen.getAddresses().addAll(List.of(regAddress, address));
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(citizen));
+
+        assertDoesNotThrow(() -> citizenService.unlinkAddressFromCitizen(citizenId, addressId));
+
+        verify(repository).findById(citizenId);
+    }
+
+    @Test
+    void unlinkAddressFromCitizen_RegAddressThrowsException() {
+        Long citizenId = 1L;
+        Long addressId = 1L;
+        Address regAddress = new Address();
+        regAddress.setId(addressId);
+        Citizen citizen = new Citizen();
+        citizen.setRegistrationAddress(regAddress);
+        citizen.getAddresses().add(regAddress);
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(citizen));
+
+        assertThrows(BadRequestException.class, () -> citizenService.unlinkAddressFromCitizen(citizenId, addressId));
+
+        verify(repository).findById(citizenId);
+    }
+
+    @Test
+    void changeAddress() {
+        Long citizenId = 1L;
+        Long addressId = 1L;
+        Address regAddress = new Address();
+        regAddress.setId(addressId);
+        Citizen citizen = new Citizen();
+        citizen.setRegistrationAddress(regAddress);
+        citizen.getAddresses().add(regAddress);
+        var addressCreateDto = AddressCreateDto.builder().build();
+
+        when(repository.findById(any())).thenReturn(Optional.of(citizen));
+        when(addressService.getOrSave(any())).thenReturn(new Address());
+
+        citizenService.changeAddress(citizenId, addressId, addressCreateDto);
+
+        verify(repository).findById(citizenId);
+        verify(addressService).getOrSave(addressCreateDto);
     }
 }

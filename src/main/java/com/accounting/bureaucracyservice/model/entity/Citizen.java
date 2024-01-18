@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -37,7 +39,7 @@ public class Citizen {
     private Address registrationAddress;
 
     @OneToMany(mappedBy = "citizen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Document> documents;
+    private List<Document> documents = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -45,7 +47,7 @@ public class Citizen {
             joinColumns = {@JoinColumn(name = "CITIZEN_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ADDRESS_ID")}
     )
-    private List<Address> addresses;
+    private Set<Address> addresses = new LinkedHashSet<>();
 
     @Column(name = "IS_APPROVED")
     private boolean approvedAccount = false;
