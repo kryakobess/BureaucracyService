@@ -7,9 +7,6 @@ import com.accounting.bureaucracyservice.model.entity.Document;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
