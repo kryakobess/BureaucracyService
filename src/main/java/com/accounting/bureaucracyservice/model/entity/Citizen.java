@@ -48,7 +48,4 @@ public class Citizen {
             inverseJoinColumns = {@JoinColumn(name = "ADDRESS_ID")}
     )
     private Set<Address> addresses = new LinkedHashSet<>();
-
-    @Column(name = "IS_APPROVED")
-    private boolean approvedAccount = false;
 }

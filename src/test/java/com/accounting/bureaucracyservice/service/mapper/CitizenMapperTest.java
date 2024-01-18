@@ -46,7 +46,6 @@ class CitizenMapperTest {
         when(citizen.getSecondName()).thenReturn("Second");
         when(citizen.getDateOfBirth()).thenReturn(LocalDate.now());
         when(citizen.getPhoneNumber()).thenReturn("+78005553535");
-        when(citizen.isApprovedAccount()).thenReturn(true);
 
         // Act
         CitizenDto dto = citizenMapper.toDto(citizen);
@@ -57,7 +56,6 @@ class CitizenMapperTest {
         assertEquals("First", dto.firstName());
         assertEquals("Second", dto.secondName());
         assertEquals("+78005553535", dto.phoneNumber());
-        assertTrue(dto.approvedAccount());
     }
 
     @Test
@@ -76,7 +74,6 @@ class CitizenMapperTest {
         assertEquals("First", model.getFirstName());
         assertEquals("Second", model.getSecondName());
         assertEquals("+78005553535", model.getPhoneNumber());
-        assertFalse(model.isApprovedAccount());
     }
 
     @Test

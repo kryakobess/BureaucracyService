@@ -19,7 +19,6 @@ public interface CitizenMapper {
     CitizenDto toDto(Citizen entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "approvedAccount", ignore = true)
     @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "registrationAddress", ignore = true)
     @Mapping(target = "documents", expression = "java(getIdentityDocuments(citizenCreateDto))")

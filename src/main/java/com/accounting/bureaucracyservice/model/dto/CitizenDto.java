@@ -15,7 +15,6 @@ public record CitizenDto(
         String phoneNumber,
         List<DocumentDto> documents,
         AddressDto registrationAddress,
-        List<AddressDto> addresses,
-        boolean approvedAccount
+        List<AddressDto> addresses
 ) {
 }
