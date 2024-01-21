@@ -1,6 +1,7 @@
 package com.accounting.bureaucracyservice.service.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
+import com.accounting.bureaucracyservice.model.dto.ChangeCitizenDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
@@ -122,6 +123,18 @@ public class CitizenServiceImpl implements CitizenService {
         citizen.getAddresses().remove(addressToChange);
         citizen.getAddresses().add(newAddress);
         return citizen;
+    }
+
+    @Override
+    public Citizen changeCitizen(Long id, ChangeCitizenDto dto) {
+        citizenValidator.validate(dto);
+        var citizen = getCitizenById(id);
+
+        citizen.setFirstName(dto.firstName());
+        citizen.setSecondName(dto.secondName());
+        citizen.setPhoneNumber(dto.phoneNumber());
+
+        return citizenRepository.save(citizen);
     }
 
     private Address findAddressForCitizenById(Citizen citizen, Long addressId) {

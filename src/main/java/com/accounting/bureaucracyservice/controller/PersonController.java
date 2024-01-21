@@ -158,7 +158,7 @@ public class PersonController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiError.class)) })
     })
-    @PatchMapping("/{id}/document")
+    @PutMapping("/{id}/document")
     public ResponseEntity<DocumentDto> changeDocument(
             @PathVariable Long id,
             @RequestBody DocumentCreateDto createDto
@@ -182,4 +182,10 @@ public class PersonController {
     public ResponseEntity<DocumentsGetDto> getDocuments(@PathVariable Long id) {
         return ResponseEntity.ok(personFacade.getDocuments(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CitizenDto> changeCitizenInfo(@PathVariable Long id, @RequestBody ChangeCitizenDto dto) {
+        return ResponseEntity.ok(personFacade.changeCitizenInfo(id, dto));
+    }
+
 }
