@@ -1,15 +1,8 @@
 package com.accounting.bureaucracyservice.service.facade.impl;
 
-import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
-import com.accounting.bureaucracyservice.model.dto.AddressesGetDto;
-import com.accounting.bureaucracyservice.model.dto.ChangeCitizenDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenDto;
-import com.accounting.bureaucracyservice.model.dto.CitizenPageableDto;
-import com.accounting.bureaucracyservice.model.dto.DocumentCreateDto;
-import com.accounting.bureaucracyservice.model.dto.DocumentDto;
-import com.accounting.bureaucracyservice.model.dto.DocumentsGetDto;
+import com.accounting.bureaucracyservice.model.dto.*;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
+import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.filters.AddressQueryFilter;
 import com.accounting.bureaucracyservice.model.filters.CitizenQueryFilter;
 import com.accounting.bureaucracyservice.service.mapper.AddressMapper;
@@ -128,6 +121,17 @@ public class PersonFacadeImpl implements PersonFacade {
     public CitizenDto changeCitizenInfo(Long id, ChangeCitizenDto dto) {
         log.info("Put request changeCitizenInfo for citizen with id={}", id);
         return citizenMapper.toDto(citizenService.changeCitizen(id, dto));
+    }
+
+    @Override
+    public CheckExistsResponseDto checkCitizenExists(CheckCitizenExistsDto dto) {
+        log.info("Get request checkCitizenExists for citizen with firstName={}, secondName={}", dto.firstName(), dto.secondName());
+        return new CheckExistsResponseDto(citizenService.isCitizenExistsByNameAndDocument(
+                dto.firstName(),
+                dto.secondName(),
+                DocumentType.valueOf(dto.documentType()),
+                dto.documentNumber()
+        ));
     }
 
     private AddressesGetDto mapCitizenToAddressGetDto(Citizen citizen) {

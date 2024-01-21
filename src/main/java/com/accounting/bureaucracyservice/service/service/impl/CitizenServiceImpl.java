@@ -23,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -56,19 +55,19 @@ public class CitizenServiceImpl implements CitizenService {
 
     private void checkCitizenToCreateAlreadyExists(Citizen citizen) {
         String identityPassportNumber = citizen.getDocuments().get(0).getNumber();
-        var isExists = isCitizenExistsByNameAndIdentityPassportNumber(citizen.getFirstName(), citizen.getSecondName(), identityPassportNumber);
+        var isExists = isCitizenExistsByNameAndDocument(citizen.getFirstName(), citizen.getSecondName(), DocumentType.IDENTITY_PASSPORT, identityPassportNumber);
         if (isExists) {
             throw new BadRequestException("Citizen with this data already exists");
         }
     }
 
     @Override
-    public boolean isCitizenExistsByNameAndIdentityPassportNumber(String firstName, String secondName, String number) {
+    public boolean isCitizenExistsByNameAndDocument(String firstName, String secondName, DocumentType documentType, String number) {
         return documentRepository.existsByNumberAndCitizen_FirstNameAndCitizen_SecondNameAndDocumentType(
                 number,
                 firstName,
                 secondName,
-                DocumentType.IDENTITY_PASSPORT
+                documentType
         );
     }
 

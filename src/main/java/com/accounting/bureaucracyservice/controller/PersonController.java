@@ -188,4 +188,8 @@ public class PersonController {
         return ResponseEntity.ok(personFacade.changeCitizenInfo(id, dto));
     }
 
+    @GetMapping("/exists")
+    public ResponseEntity<CheckExistsResponseDto> existsByNameAndDocument(CheckCitizenExistsDto dto) {
+        return ResponseEntity.ok(personFacade.checkCitizenExists(dto));
+    }
 }
