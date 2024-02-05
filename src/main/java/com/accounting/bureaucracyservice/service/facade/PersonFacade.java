@@ -27,4 +27,8 @@ public interface PersonFacade {
     DocumentDto changeDocument(Long id, DocumentCreateDto createDto);
 
     DocumentsGetDto getDocuments(Long id);
+
+    CitizenDto changeCitizenInfo(Long id, ChangeCitizenDto dto);
+
+    CheckExistsResponseDto checkCitizenExists(CheckCitizenExistsDto dto);
 }

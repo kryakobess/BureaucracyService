@@ -1,7 +1,6 @@
 package com.accounting.bureaucracyservice.service.service.impl;
 
 import com.accounting.bureaucracyservice.model.dto.AddressCreateDto;
-import com.accounting.bureaucracyservice.model.dto.AddressDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
@@ -15,7 +14,6 @@ import com.accounting.bureaucracyservice.service.mapper.CitizenMapper;
 import com.accounting.bureaucracyservice.service.repository.CitizenRepository;
 import com.accounting.bureaucracyservice.service.repository.DocumentRepository;
 import com.accounting.bureaucracyservice.service.service.PredicateCreationService;
-import com.accounting.bureaucracyservice.service.service.impl.CitizenServiceImpl;
 import com.accounting.bureaucracyservice.service.validator.CitizenValidator;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -28,7 +26,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,12 +101,13 @@ class CitizenServiceTest {
     }
 
     @Test
-    void isCitizenExistsByNameAndIdentityPassportNumber() {
+    void isCitizenExistsByNameAndIdentityDocumentNumber() {
         var firstName = "First";
         var secondName = "Second";
         var number = "1234567890";
+        var docType = DocumentType.IDENTITY_PASSPORT;
         when(documentRepository.existsByNumberAndCitizen_FirstNameAndCitizen_SecondNameAndDocumentType(any(), any(), any(), any())).thenReturn(true);
-        var res = citizenService.isCitizenExistsByNameAndIdentityPassportNumber(firstName, secondName, number);
+        var res = citizenService.isCitizenExistsByNameAndDocument(firstName, secondName, docType, number);
 
         verify(documentRepository).existsByNumberAndCitizen_FirstNameAndCitizen_SecondNameAndDocumentType(number, firstName, secondName, DocumentType.IDENTITY_PASSPORT);
         assertTrue(res);

@@ -1,5 +1,6 @@
 package com.accounting.bureaucracyservice.service.validator.impl;
 
+import com.accounting.bureaucracyservice.model.dto.ChangeCitizenDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
 import com.accounting.bureaucracyservice.service.validator.AddressValidator;
@@ -30,8 +31,21 @@ public class CitizenValidatorImpl implements CitizenValidator {
         checkNotNull(citizenCreateDto.passportNumber(), "passportNumber");
 
         checkPassportFormat(citizenCreateDto);
-        checkPhoneNumber(citizenCreateDto.phoneNumber());
+        if (citizenCreateDto.phoneNumber() != null) {
+            checkPhoneNumber(citizenCreateDto.phoneNumber());
+        }
         addressValidator.validate(citizenCreateDto.registrationAddress());
+    }
+
+    @Override
+    public void validate(ChangeCitizenDto changeCitizenDto) {
+        checkNotNull(changeCitizenDto.firstName(), "firstName");
+        checkNotNull(changeCitizenDto.secondName(), "secondName");
+
+        var phoneNumber = changeCitizenDto.phoneNumber();
+        if (phoneNumber != null) {
+            checkPhoneNumber(phoneNumber);
+        }
     }
 
     private void checkPhoneNumber(String number) {
