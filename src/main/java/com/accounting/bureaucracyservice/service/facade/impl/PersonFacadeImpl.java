@@ -124,14 +124,15 @@ public class PersonFacadeImpl implements PersonFacade {
     }
 
     @Override
-    public CheckExistsResponseDto checkCitizenExists(CheckCitizenExistsDto dto) {
-        log.info("Get request checkCitizenExists for citizen with firstName={}, secondName={}", dto.firstName(), dto.secondName());
-        return new CheckExistsResponseDto(citizenService.isCitizenExistsByNameAndDocument(
+    public CitizenInfoResponseDto getCitizenByInfo(CitizenInfoDto dto) {
+        log.info("Get request getCitizenByInfo for citizen with firstName={}, secondName={}", dto.firstName(), dto.secondName());
+        var citizen = citizenService.getCitizenByNameAndDocument(
                 dto.firstName(),
                 dto.secondName(),
                 DocumentType.valueOf(dto.documentType()),
                 dto.documentNumber()
-        ));
+        );
+        return new CitizenInfoResponseDto(citizen.getId());
     }
 
     private AddressesGetDto mapCitizenToAddressGetDto(Citizen citizen) {

@@ -30,5 +30,5 @@ public interface PersonFacade {
 
     CitizenDto changeCitizenInfo(Long id, ChangeCitizenDto dto);
 
-    CheckExistsResponseDto checkCitizenExists(CheckCitizenExistsDto dto);
+    CitizenInfoResponseDto getCitizenByInfo(CitizenInfoDto dto);
 }

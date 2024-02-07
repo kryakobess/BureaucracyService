@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CitizenRepository extends JpaRepository<Citizen, Long>, QuerydslPredicateExecutor<Citizen> {
 
@@ -17,5 +19,4 @@ public interface CitizenRepository extends JpaRepository<Citizen, Long>, Queryds
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"registrationAddress"})
     Page<Citizen> findAll(Predicate predicate, Pageable pageable);
-
 }

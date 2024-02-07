@@ -5,6 +5,7 @@ import com.accounting.bureaucracyservice.model.dto.ChangeCitizenDto;
 import com.accounting.bureaucracyservice.model.dto.CitizenCreateDto;
 import com.accounting.bureaucracyservice.model.entity.Address;
 import com.accounting.bureaucracyservice.model.entity.Citizen;
+import com.accounting.bureaucracyservice.model.entity.Document;
 import com.accounting.bureaucracyservice.model.enums.DocumentType;
 import com.accounting.bureaucracyservice.model.exceptions.BadRequestException;
 import com.accounting.bureaucracyservice.model.exceptions.NotFoundException;
@@ -69,6 +70,14 @@ public class CitizenServiceImpl implements CitizenService {
                 secondName,
                 documentType
         );
+    }
+
+    @Override
+    public Citizen getCitizenByNameAndDocument(String firstName, String secondName, DocumentType documentType, String number) {
+        return documentRepository.findByNumberAndDocumentType(number, documentType)
+                .map(Document::getCitizen)
+                .filter(citizen -> citizen.getFirstName().equals(firstName) && citizen.getSecondName().equals(secondName))
+                .orElseThrow(() -> new NotFoundException("Citizen with this information does not exist"));
     }
 
     @Override

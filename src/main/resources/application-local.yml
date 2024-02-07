@@ -2,6 +2,10 @@ app:
   secret: some-secret-key1
 
 spring:
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/bureaucracy_db
