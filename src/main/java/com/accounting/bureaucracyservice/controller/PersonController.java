@@ -14,8 +14,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/person")
@@ -188,8 +186,8 @@ public class PersonController {
         return ResponseEntity.ok(personFacade.changeCitizenInfo(id, dto));
     }
 
-    @GetMapping("/exists")
-    public ResponseEntity<CheckExistsResponseDto> existsByNameAndDocument(CheckCitizenExistsDto dto) {
-        return ResponseEntity.ok(personFacade.checkCitizenExists(dto));
+    @GetMapping("/getByNameAndDocument")
+    public ResponseEntity<CitizenInfoResponseDto> existsByNameAndDocument(CitizenInfoDto dto) {
+        return ResponseEntity.ok(personFacade.getCitizenByInfo(dto));
     }
 }

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: bureaucracyService
+  cloud:
+    consul:
+      config:
+        enabled: false
+      discovery:
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 20s
+        instanceId: ${spring.application.name}:${random.value}

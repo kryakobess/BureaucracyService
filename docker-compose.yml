@@ -1,6 +1,11 @@
 version: "3.9"
 
 services:
+  consul:
+    image: consul:1.1.0
+    hostname: localhost
+    ports:
+      - 8500:8500
   postgres:
     container_name: bureaucracy_db
     image: postgres:latest

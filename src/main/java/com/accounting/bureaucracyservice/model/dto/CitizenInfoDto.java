@@ -3,7 +3,7 @@ package com.accounting.bureaucracyservice.model.dto;
 import lombok.Builder;
 
 @Builder
-public record CheckCitizenExistsDto(
+public record CitizenInfoDto(
         String firstName,
         String secondName,
         String documentType,

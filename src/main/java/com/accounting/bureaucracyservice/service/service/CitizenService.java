@@ -18,4 +18,5 @@ public interface CitizenService {
     Citizen unlinkAddressFromCitizen(Long citizenId, Long addressId);
     Citizen changeAddress(Long citizenId, Long addressId, AddressCreateDto addressCreateDto);
     Citizen changeCitizen(Long id, ChangeCitizenDto dto);
+    Citizen getCitizenByNameAndDocument(String firstName, String secondName, DocumentType documentType, String number);
 }
