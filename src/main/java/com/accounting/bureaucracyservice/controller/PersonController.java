@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +32,7 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('CIVIL_INFO_REDACTOR')")
     public ResponseEntity<CitizenDto> createPerson(@RequestBody CitizenCreateDto citizenCreateDto) {
         return ResponseEntity.ok(personFacade.createPerson(citizenCreateDto));
     }
@@ -45,12 +47,14 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_VIEWER')")
     public ResponseEntity<CitizenDto> getPersonById(@PathVariable long id) {
         return ResponseEntity.ok(personFacade.getPersonById(id));
     }
 
     @Operation(summary = "Get all citizens filtered and pageable")
     @GetMapping
+    @PreAuthorize("hasAuthority('CIVIL_INFO_VIEWER')")
     public ResponseEntity<Page<CitizenDto>> getPersons(
             CitizenPageableDto citizenPageableDto,
             @PageableDefault(size = 20) Pageable pageable
@@ -71,6 +75,7 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @PostMapping("/{id}/address")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_REDACTOR')")
     public ResponseEntity<AddressesGetDto> addAddress(@PathVariable Long id, @RequestBody AddressCreateDto addressCreateDto) {
         return ResponseEntity.ok(personFacade.addAddress(id, addressCreateDto));
     }
@@ -85,6 +90,7 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @GetMapping("/{id}/address")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_VIEWER')")
     public ResponseEntity<AddressesGetDto> getAddresses(@PathVariable Long id) {
         return ResponseEntity.ok(personFacade.getAddress(id));
     }
@@ -102,6 +108,7 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @DeleteMapping("/{id}/address/{addressId}/unlink")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_REDACTOR')")
     public ResponseEntity<AddressesGetDto> unlinkAddressFromCitizen(@PathVariable Long id, @PathVariable Long addressId) {
         return ResponseEntity.ok(personFacade.unlinkAddress(id, addressId));
     }
@@ -119,6 +126,7 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @PutMapping("/{id}/address/{addressId}")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_REDACTOR')")
     public ResponseEntity<AddressesGetDto> changeAddressForCitizen(
             @PathVariable Long id,
             @PathVariable Long addressId,
@@ -140,6 +148,7 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @PostMapping("/{id}/document")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_REDACTOR')")
     public ResponseEntity<DocumentDto> addDocument(@PathVariable Long id, @RequestBody DocumentCreateDto dto) {
         return ResponseEntity.ok(personFacade.addDocument(id, dto));
     }
@@ -157,6 +166,7 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @PutMapping("/{id}/document")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_REDACTOR')")
     public ResponseEntity<DocumentDto> changeDocument(
             @PathVariable Long id,
             @RequestBody DocumentCreateDto createDto
@@ -177,16 +187,19 @@ public class PersonController {
                             schema = @Schema(implementation = ApiError.class)) })
     })
     @GetMapping("/{id}/document")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_VIEWER')")
     public ResponseEntity<DocumentsGetDto> getDocuments(@PathVariable Long id) {
         return ResponseEntity.ok(personFacade.getDocuments(id));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('CIVIL_INFO_REDACTOR')")
     public ResponseEntity<CitizenDto> changeCitizenInfo(@PathVariable Long id, @RequestBody ChangeCitizenDto dto) {
         return ResponseEntity.ok(personFacade.changeCitizenInfo(id, dto));
     }
 
     @GetMapping("/getByNameAndDocument")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CitizenInfoResponseDto> existsByNameAndDocument(CitizenInfoDto dto) {
         return ResponseEntity.ok(personFacade.getCitizenByInfo(dto));
     }
