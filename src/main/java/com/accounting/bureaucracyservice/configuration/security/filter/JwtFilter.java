@@ -1,6 +1,7 @@
 package com.accounting.bureaucracyservice.configuration.security.filter;
 
 import com.accounting.bureaucracyservice.service.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +34,12 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
             var jwt = authHeader.replace(BEARER_PREFIX, "");
             log.debug("Jwt authorization: {}", jwt);
-            SecurityContextHolder.getContext().setAuthentication(jwtService.parseToken(jwt));
+            try {
+                SecurityContextHolder.getContext().setAuthentication(jwtService.parseToken(jwt));
+            } catch (ExpiredJwtException e) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
         }
         filterChain.doFilter(request, response);
     }
