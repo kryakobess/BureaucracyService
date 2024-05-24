@@ -9,3 +9,8 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 20s
         instanceId: ${spring.application.name}:${random.value}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+server:
+  port: 8080
